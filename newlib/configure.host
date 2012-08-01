@@ -212,6 +212,9 @@ case "${host_cpu}" in
   mips*)
 	machine_dir=mips
 	;;
+  mist32)
+	machine_dir=mist32
+	;;
   mmix)
 	;;
   mn10200)
@@ -717,6 +720,9 @@ case "${host}" in
   mips*-*-elf*)
 	default_newlib_io_long_long="yes"
 	newlib_cflags="${newlib_cflags} -DMISSING_SYSCALL_NAMES"
+	;;
+  mist32-*-*)
+	syscall_dir=syscalls
 	;;
   mmix-*)
 	syscall_dir=syscalls

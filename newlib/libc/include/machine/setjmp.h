@@ -116,6 +116,11 @@ _BEGIN_STD_C
 # endif
 #endif
 
+#ifdef __mist32__
+#define _JBLEN 32
+#define _JBTYPE unsigned int
+#endif
+
 #ifdef __m88000__
 #define _JBLEN 21
 #endif
