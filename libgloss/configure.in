@@ -120,6 +120,9 @@ case "${target}" in
   microblaze*-*-*)
 	AC_CONFIG_SUBDIRS([microblaze])
 	;;
+  mist32-*-*)
+        AC_CONFIG_SUBDIRS([mist32])
+	;;
   mt-*-*)
         AC_CONFIG_SUBDIRS([mt])
 	;;
