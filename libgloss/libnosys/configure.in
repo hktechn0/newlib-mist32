@@ -63,6 +63,8 @@ case "${target}" in
 	;;
   m32r-*-*)
 	;;
+  mist32-*-*)
+	;;
   mn10?00-*-*)
 	;;
   powerpcle-*-pe)
