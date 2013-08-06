@@ -1,60 +1,75 @@
-# mist32 startup code
+/* crt0.S -- startup file for mist32 */
 
 	.section .text
 	.global	_start
+	.align	2
 _start:
-	
 	;; Initialise the stack pointer
-	lih	r0, hi(_stack)
-	wl16	r0, lo(_stack)
-	srspw	r0
-	move	rbase, r0
-	
+	lih	rtmp, hi(_stack)
+	wl16	rtmp, lo(_stack)
+	srspw	rtmp
+	clr	rbase
+
 	;; Clear the BSS.  Do it in two parts for efficiency:
 	;; longwords first for most of it, then the remaining 0 to 3 bytes.
+	lih	r3, hi(__bss_start__)
+	wl16	r3, lo(__bss_start__)	; r3 = start of BSS
+	lih	r4, hi(__bss_end__)
+	wl16	r4, lo(__bss_end__)	; r4 = end of BSS + 1
 
-	lih	r2, hi(__bss_start)
-	wl16	r2, lo(__bss_start) ; R2 = start of BSS
-	lih	r3, hi(__bss_start)
-	wl16	r3, lo(__bss_start) ; R3 = end of BSS + 1
+	sub	r4, r3		; r4 = BSS size in bytes
+	move	r5, r4
+	shl	r5, 2		; r5 = BSS size in longwords (rounded down)
 
-	sub	r3, r2		; R3 = BSS size in bytes
-	move	r4, r3
-	shl	r4, 2		; R4 = BSS size in longwords (rounded down)
-	clr	r1		; clear R1 for longword store
-
-	cmp	r4, 0
+	clr	rtmp		; clear rtmp for longword store
+	
+	cmp	r5, 0
 	br	2f, #eq		; any more to go?
 
+	;; Clear BSS in word
 1:	
-	st32	r1, r2
-	add	r2, 4
-	sub	r4, 1
-	cmp	r4, 0
-	br	1b, #ne
-	
+	st32	rtmp, r3	; zero clear
+	add	r3, 4		; increment addr in word
+	dec	r5, r5		; decrement remaining count
+	br	1b, #nz		; any more to go?
+
+	;; Clear BSS in byte
 2:
-	lil	r4, 0x3		; get no. of remaining BSS bytes to clear
-	and 	r3, r4
-	cmp	r3, 0
-	br	4f, #eq
+	lil	r5, 0x3		; mask
+	and 	r4, r5		; r4 = remaining BSS bytes to clear
+	br	4f, #z
 3:
-	st8	r1, r2
-	add	r2, 1
-	sub	r3, 1
-	cmp	r4, 0
-	br	3b, #ne
-4:
+	st8	rtmp, r3	; zero clear
+	inc	r3, r3		; increment addr
+	dec	r4, r4		; decrement remaining count
+	br	3b, #nz		; any more to go?
 
 	;; Run code in the .init section.
 	;; This will queue the .fini section to be run with atexit.
-	b	__init, #al
+4:
+	lih	rtmp, hi(_init)
+	wl16	rtmp, lo(_init)
+	movepc	rret, 8
+	b	rtmp, #al
+
+	lih	r1, hi(_fini)		; arg[0]
+	wl16	r1, lo(_fini)
+	lih	rtmp, hi(atexit)
+	wl16	rtmp, lo(atexit)
+	movepc	rret, 8
+	b	rtmp, #al
 
 	;; Call main, then exit.
-	b	main, #al
-	b	exit, #al
+	lih	rtmp, hi(main)
+	wl16	rtmp, lo(main)
+	movepc	rret, 8
+	b	rtmp, #al
+	
+	lih	rtmp, hi(exit)
+	wl16	rtmp, lo(exit)
+	movepc	rret, 8
+	b	rtmp, #al
 
 	;; If that fails just loop.
-1:
-	br	1b, #al
-
+5:
+	br	5b, #al
