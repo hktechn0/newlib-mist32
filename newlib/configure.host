@@ -494,6 +494,9 @@ case "${host}" in
   mips*-dec-*)
 	sys_dir=decstation
 	;;
+  mist32*)
+        sys_dir=
+        ;;
   mmix-knuth-mmixware)
 	sys_dir=mmixware
 	;;
@@ -722,7 +725,7 @@ case "${host}" in
 	newlib_cflags="${newlib_cflags} -DMISSING_SYSCALL_NAMES"
 	;;
   mist32-*-*)
-	syscall_dir=syscalls
+        syscall_dir=syscalls
 	;;
   mmix-*)
 	syscall_dir=syscalls
