@@ -8,7 +8,9 @@
 int
 _read (int fd, char *buf, int len)
 {
-  unsigned int *cfg, *rxd, i, data;
+  volatile unsigned int *cfg, *rxd;
+  unsigned int data;
+  int i;
 
   cfg = OFFSET_BYTE(_mist32_iosr(), DPS_SCICFG);
   *cfg |= SCICFG_REN;
@@ -20,8 +22,10 @@ _read (int fd, char *buf, int len)
 
     if (data & SCIRXD_VALID)
       buf[i] = data & 0xff;
-    else
+    else if(i > 0)
       break;
+    else
+      i--;
   }
 
   return i;
