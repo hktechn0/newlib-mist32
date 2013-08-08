@@ -8,7 +8,8 @@
 int
 _write (int fd, char *buf, int len)
 {
-  unsigned int *cfg, *txd, i;
+  volatile unsigned int *cfg, *txd;
+  unsigned int i;
 
   cfg = OFFSET_BYTE(_mist32_iosr(), DPS_SCICFG);
   *cfg |= SCICFG_TEN;
