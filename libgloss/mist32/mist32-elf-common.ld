@@ -23,7 +23,7 @@ ENTRY(_start)
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */
-  . = 0x00001000;
+  . = 0x00000000;
   .interp     : { *(.interp) 	}
   .hash          : { *(.hash)		}
   .dynsym        : { *(.dynsym)		}
@@ -231,6 +231,6 @@ SECTIONS
   .debug_funcnames 0 : { *(.debug_funcnames) }
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) }
-  .stack 0x400000 : { _stack = .; *(.stack) }
+  .stack 0x4000000 : { _stack = .; *(.stack) }
   /* These must appear regardless of  .  */
 }
