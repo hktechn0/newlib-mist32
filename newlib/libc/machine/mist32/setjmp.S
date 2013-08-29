@@ -1,8 +1,9 @@
 # setjmp for mist32
 
 	.text
-	.global	_setjmp
-_setjmp:
+	.global	setjmp
+	.type	setjmp,@function
+setjmp:
 	st32	r1, r1
 	add	r1, 4
 	st32	r2, r1
@@ -67,6 +68,9 @@ _setjmp:
 	add	r1, 4
 	srspr	r0
 	st32	r0, r1
-# Return 0 to caller.
-	lil	r0, 0
+
+	;; Return 0 to caller.
+	clr	r0
 	b	rret, #al
+.Lend1:
+	.size	setjmp,.Lend1-setjmp
