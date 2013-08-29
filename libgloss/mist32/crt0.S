@@ -59,6 +59,11 @@ _start:
 	movepc	rret, 8
 	b	rtmp, #al
 
+	;; argc, argv, envv
+	lil	r1, 0
+	clr	r2
+	clr	r3
+
 	;; Call main, then exit.
 	lih	rtmp, hi(main)
 	wl16	rtmp, lo(main)
