@@ -3374,6 +3374,9 @@ case "${target}" in
   *-*-vxworks*)
     noconfigdirs="$noconfigdirs ${libgcj}"
     ;;
+  *-*-xv6*)
+    noconfigdirs="$noconfigdirs ${libgcj}"
+    ;;
   alpha*-*-*vms*)
     noconfigdirs="$noconfigdirs ${libgcj}"
     ;;
@@ -3608,6 +3611,8 @@ case "${target}" in
     ;;
   *-*-vxworks*)
     ;;
+  *-*-xv6*)
+    ;;
   alpha*-dec-osf*)
     # ld works, but does not support shared libraries.
     # gas doesn't generate exception information.
@@ -3795,6 +3800,9 @@ case "${target}" in
     ;;
   mips*-*-*)
     noconfigdirs="$noconfigdirs gprof"
+    ;;
+  mist32-*-*)
+    noconfigdirs="$noconfigdirs gdb gprof"
     ;;
   sh-*-* | sh64-*-*)
     case "${target}" in
