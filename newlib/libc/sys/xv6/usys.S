@@ -21,6 +21,9 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 
+#define SYS_omap   22
+#define SYS_ounmap 23
+
 // These are arbitrarily chosen, but with care not to overlap
 // processor defined exceptions or interrupt vectors.
 #define T_SYSCALL       64      // system call
@@ -53,3 +56,5 @@ SYSCALL(getpid)
 SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
+SYSCALL(omap)
+SYSCALL(ounmap)
