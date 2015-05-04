@@ -550,7 +550,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="close.c"
+ac_unique_file="crt0.S"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 host_makefile_frag_path
@@ -1727,8 +1727,6 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-ac_config_headers="$ac_config_headers config.h"
-
 
 if test "${enable_shared}" = "yes" ; then
     echo "Shared libraries not supported for cross compiling, ignored"
@@ -1983,191 +1981,6 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
-$as_echo "#define HAVE_GNU_LD 1" >>confdefs.h
-
-case "${target}" in
-  *-*-cygwin*)
-	;;
-  a29k-amd-udi)
-	;;
-  arc-*-*)
-	;;
-  arm*-*-*)
-	;;
-  bfin-*-*)
-	;;
-  cris-*-* | crisv32-*-*)
-	;;
-  d10v*)
-	;;
-  h8300*-*-*)
-	;;
-  h8500-*-*)
-	;;
-  i345686-*-sco*)
-	;;
-  lm32-*-*)
-	;;
-  m32r-*-*)
-	;;
-  mist32-*-*)
-	;;
-  mn10?00-*-*)
-	;;
-  powerpcle-*-pe)
-	;;
-  sh*-*-*)
-	;;
-  sparc-sun-sunos*)
-	;;
-  sparc64-*-*)
-	;;
-  v850*-*-*)
-	;;
-  w65-*-*)
-	;;
-  xstormy16-*-*)
-	;;
-  z8k-*-*)
-	;;
-  *)
-	$as_echo "#define MISSING_SYSCALL_NAMES 1" >>confdefs.h
-
-	;;
-esac
-
-case "${target}" in
-  *-*-elf)
-        $as_echo "#define HAVE_ELF 1" >>confdefs.h
-
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for .previous assembler directive" >&5
-$as_echo_n "checking for .previous assembler directive... " >&6; }
-if test "${libc_cv_asm_previous_directive+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-          libc_cv_asm_previous_directive=no
-        cat > conftest.s <<EOF
-.section foo_section
-.previous
-EOF
-        if { ac_try='${CC-cc} -c $CFLAGS conftest.s 1>&5'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; }; then
-          libc_cv_asm_previous_directive=yes
-        fi
-        rm -f conftest*
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libc_cv_asm_previous_directive" >&5
-$as_echo "$libc_cv_asm_previous_directive" >&6; }
-
-	if test "x${libc_cv_asm_previous_directive}" = "xyes"; then
-          $as_echo "#define HAVE_ASM_PREVIOUS_DIRECTIVE 1" >>confdefs.h
-
-	fi
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for .popsection assembler directive" >&5
-$as_echo_n "checking for .popsection assembler directive... " >&6; }
-if test "${libc_cv_asm_popsection_directive+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-          libc_cv_asm_popsection_directive=no
-        cat > conftest.s <<EOF
-.pushsection foo_section
-.popsection
-EOF
-        if { ac_try='${CC-cc} -c $CFLAGS conftest.s 1>&5'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; }; then
-          libc_cv_asm_popsection_directive=yes
-        fi
-        rm -f conftest*
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libc_cv_asm_popsection_directive" >&5
-$as_echo "$libc_cv_asm_popsection_directive" >&6; }
-
-	if test "x${libc_cv_asm_popsection_directive}" = "xyes"; then
-          $as_echo "#define HAVE_ASM_POPSECTION_DIRECTIVE 1" >>confdefs.h
-
-	fi
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for section attributes" >&5
-$as_echo_n "checking for section attributes... " >&6; }
-if test "${libc_cv_section_attributes+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-          libc_cv_section_attributes=no
-        cat > conftest.c <<EOF
-int secttest __attribute__ ((section (".gnu.warning.secttest"))) = 10;
-int main() {}
-EOF
-        if { ac_try='${CC-cc} -c $CFLAGS conftest.c 1>&5'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; }; then
-          libc_cv_section_attributes=yes
-        fi
-        rm -f conftest*
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libc_cv_section_attributes" >&5
-$as_echo "$libc_cv_section_attributes" >&6; }
-	if test "x${libc_cv_section_attributes}" = "xyes"; then
-          $as_echo "#define HAVE_SECTION_ATTRIBUTES 1" >>confdefs.h
-
-	fi
-        ;;
-esac
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for symbol prefix" >&5
-$as_echo_n "checking for symbol prefix... " >&6; }
-if test "${libc_cv_symbol_prefix+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat > conftest.c <<\EOF
-foo () { }
-EOF
-libc_cv_symbol_prefix=none
-if { ac_try='${CC-cc} -S conftest.c -o - | fgrep "\$foo" > /dev/null'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; };
-then
-  libc_cv_symbol_prefix='$'
-else
-  if { ac_try='${CC-cc} -S conftest.c -o - | fgrep "_foo" > /dev/null'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; };
-  then
-    libc_cv_symbol_prefix=_
-  fi
-fi
-rm -f conftest*
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $libc_cv_symbol_prefix" >&5
-$as_echo "$libc_cv_symbol_prefix" >&6; }
-if test $libc_cv_symbol_prefix != none; then
-  cat >>confdefs.h <<_ACEOF
-#define __SYMBOL_PREFIX "$libc_cv_symbol_prefix"
-_ACEOF
-
-else
-  $as_echo "#define __SYMBOL_PREFIX \"\"" >>confdefs.h
-
-fi
-
 rm -rf .tst 2>/dev/null
 mkdir .tst 2>/dev/null
 if test -d .tst; then
@@ -2185,7 +1998,7 @@ ac_config_commands="$ac_config_commands depfiles"
 am_make=${MAKE-make}
 cat > confinc << 'END'
 am__doit:
-	@echo done
+	@echo this is the am__doit target
 .PHONY: am__doit
 END
 # If we don't find an include directive, just comment out the code.
@@ -2196,24 +2009,24 @@ am__quote=
 _am_result=none
 # First try GNU make style include.
 echo "include confinc" > confmf
-# We grep out `Entering directory' and `Leaving directory'
-# messages which can occur if `w' ends up in MAKEFLAGS.
-# In particular we don't look at `^make:' because GNU make might
-# be invoked under some other name (usually "gmake"), in which
-# case it prints its new name instead of `make'.
-if test "`$am_make -s -f confmf 2> /dev/null | grep -v 'ing directory'`" = "done"; then
-   am__include=include
-   am__quote=
-   _am_result=GNU
-fi
+# Ignore all kinds of additional output from `make'.
+case `$am_make -s -f confmf 2> /dev/null` in #(
+*the\ am__doit\ target*)
+  am__include=include
+  am__quote=
+  _am_result=GNU
+  ;;
+esac
 # Now try BSD make style include.
 if test "$am__include" = "#"; then
    echo '.include "confinc"' > confmf
-   if test "`$am_make -s -f confmf 2> /dev/null`" = "done"; then
-      am__include=.include
-      am__quote="\""
-      _am_result=BSD
-   fi
+   case `$am_make -s -f confmf 2> /dev/null` in #(
+   *the\ am__doit\ target*)
+     am__include=.include
+     am__quote="\""
+     _am_result=BSD
+     ;;
+   esac
 fi
 
 
@@ -2230,16 +2043,13 @@ if test "x$enable_dependency_tracking" != xno; then
   am_depcomp="$ac_aux_dir/depcomp"
   AMDEPBACKSLASH='\'
 fi
-
-
-if test "x$enable_dependency_tracking" != xno; then
+ if test "x$enable_dependency_tracking" != xno; then
   AMDEP_TRUE=
   AMDEP_FALSE='#'
 else
   AMDEP_TRUE='#'
   AMDEP_FALSE=
 fi
-
 
 
 # Extract the first word of "gcc", so it can be a program name with args.
@@ -2310,6 +2120,11 @@ else
   if test "$am_compiler_list" = ""; then
      am_compiler_list=`sed -n 's/^#*\([a-zA-Z0-9]*\))$/\1/p' < ./depcomp`
   fi
+  am__universal=false
+  case " $depcc " in #(
+     *\ -arch\ *\ -arch\ *) am__universal=true ;;
+     esac
+
   for depmode in $am_compiler_list; do
     # Setup a source with many dependencies, because some compilers
     # like to wrap large dependency lists on column 80 (with \), and
@@ -2327,7 +2142,17 @@ else
     done
     echo "${am__include} ${am__quote}sub/conftest.Po${am__quote}" > confmf
 
+    # We check with `-c' and `-o' for the sake of the "dashmstdout"
+    # mode.  It turns out that the SunPro C++ compiler does not properly
+    # handle `-M -o', and we need to detect this.  Also, some Intel
+    # versions had trouble with output in subdirs
+    am__obj=sub/conftest.${OBJEXT-o}
+    am__minus_obj="-o $am__obj"
     case $depmode in
+    gcc)
+      # This depmode causes a compiler race in universal mode.
+      test "$am__universal" = false || continue
+      ;;
     nosideeffect)
       # after this tag, mechanisms are not by side-effect, so they'll
       # only be used when explicitly requested
@@ -2337,18 +2162,23 @@ else
 	break
       fi
       ;;
+    msvisualcpp | msvcmsys)
+      # This compiler won't grok `-c -o', but also, the minuso test has
+      # not run yet.  These depmodes are late enough in the game, and
+      # so weak that their functioning should not be impacted.
+      am__obj=conftest.${OBJEXT-o}
+      am__minus_obj=
+      ;;
     none) break ;;
     esac
-    # We check with `-c' and `-o' for the sake of the "dashmstdout"
-    # mode.  It turns out that the SunPro C++ compiler does not properly
-    # handle `-M -o', and we need to detect this.
     if depmode=$depmode \
-       source=sub/conftest.c object=sub/conftest.${OBJEXT-o} \
+       source=sub/conftest.c object=$am__obj \
        depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
-       $SHELL ./depcomp $depcc -c -o sub/conftest.${OBJEXT-o} sub/conftest.c \
+       $SHELL ./depcomp $depcc -c $am__minus_obj sub/conftest.c \
          >/dev/null 2>conftest.err &&
+       grep sub/conftst1.h sub/conftest.Po > /dev/null 2>&1 &&
        grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
-       grep sub/conftest.${OBJEXT-o} sub/conftest.Po > /dev/null 2>&1 &&
+       grep $am__obj sub/conftest.Po > /dev/null 2>&1 &&
        ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
       # icc doesn't choke on unknown options, it will just issue warnings
       # or remarks (even with -Werror).  So we grep stderr for any message
@@ -2376,9 +2206,7 @@ fi
 $as_echo "$am_cv_CC_dependencies_compiler_type" >&6; }
 CCDEPMODE=depmode=$am_cv_CC_dependencies_compiler_type
 
-
-
-if
+ if
   test "x$enable_dependency_tracking" != xno \
   && test "$am_cv_CC_dependencies_compiler_type" = gcc3; then
   am__fastdepCC_TRUE=
@@ -2567,6 +2395,7 @@ else
   GCC=
   test "${CFLAGS+set}" = set || CFLAGS="-g"
 fi
+
 
 AS=${AS-as}
 
@@ -2761,7 +2590,43 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
 # Let make expand exec_prefix.
 test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 
-DEFS=-DHAVE_CONFIG_H
+# Transform confdefs.h into DEFS.
+# Protect against shell expansion while executing Makefile rules.
+# Protect against Makefile macro expansion.
+#
+# If the first sed substitution is executed (which looks for macros that
+# take arguments), then branch to the quote section.  Otherwise,
+# look for a macro that doesn't take arguments.
+ac_script='
+:mline
+/\\$/{
+ N
+ s,\\\n,,
+ b mline
+}
+t clear
+:clear
+s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\)/-D\1=\2/g
+t quote
+s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)/-D\1=\2/g
+t quote
+b any
+:quote
+s/[	 `~#$^&*(){}\\|;'\''"<>?]/\\&/g
+s/\[/\\&/g
+s/\]/\\&/g
+s/\$/$$/g
+H
+:any
+${
+	g
+	s/^\n//
+	s/\n/ /g
+	p
+}
+'
+DEFS=`sed -n "$ac_script" confdefs.h`
+
 
 ac_libobjs=
 ac_ltlibobjs=
@@ -3213,15 +3078,11 @@ case $ac_config_files in *"
 "*) set x $ac_config_files; shift; ac_config_files=$*;;
 esac
 
-case $ac_config_headers in *"
-"*) set x $ac_config_headers; shift; ac_config_headers=$*;;
-esac
 
 
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 # Files that config.status was made for.
 config_files="$ac_config_files"
-config_headers="$ac_config_headers"
 config_commands="$ac_config_commands"
 
 _ACEOF
@@ -3242,14 +3103,9 @@ Usage: $0 [OPTION]... [TAG]...
       --recheck    update $as_me by reconfiguring in the same conditions
       --file=FILE[:TEMPLATE]
                    instantiate the configuration file FILE
-      --header=FILE[:TEMPLATE]
-                   instantiate the configuration header FILE
 
 Configuration files:
 $config_files
-
-Configuration headers:
-$config_headers
 
 Configuration commands:
 $config_commands
@@ -3306,18 +3162,7 @@ do
     esac
     as_fn_append CONFIG_FILES " '$ac_optarg'"
     ac_need_defaults=false;;
-  --header | --heade | --head | --hea )
-    $ac_shift
-    case $ac_optarg in
-    *\'*) ac_optarg=`$as_echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"` ;;
-    esac
-    as_fn_append CONFIG_HEADERS " '$ac_optarg'"
-    ac_need_defaults=false;;
-  --he | --h)
-    # Conflict between --help and --header
-    as_fn_error "ambiguous option: \`$1'
-Try \`$0 --help' for more information.";;
-  --help | --hel | -h )
+  --he | --h |  --help | --hel | -h )
     $as_echo "$ac_cs_usage"; exit ;;
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil | --si | --s)
@@ -3385,7 +3230,6 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
 
@@ -3400,7 +3244,6 @@ done
 # bizarre bug on SunOS 4.1.3.
 if $ac_need_defaults; then
   test "${CONFIG_FILES+set}" = set || CONFIG_FILES=$config_files
-  test "${CONFIG_HEADERS+set}" = set || CONFIG_HEADERS=$config_headers
   test "${CONFIG_COMMANDS+set}" = set || CONFIG_COMMANDS=$config_commands
 fi
 
@@ -3613,116 +3456,8 @@ fi
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 fi # test -n "$CONFIG_FILES"
 
-# Set up the scripts for CONFIG_HEADERS section.
-# No need to generate them if there are no CONFIG_HEADERS.
-# This happens for instance with `./config.status Makefile'.
-if test -n "$CONFIG_HEADERS"; then
-cat >"$tmp/defines.awk" <<\_ACAWK ||
-BEGIN {
-_ACEOF
 
-# Transform confdefs.h into an awk script `defines.awk', embedded as
-# here-document in config.status, that substitutes the proper values into
-# config.h.in to produce config.h.
-
-# Create a delimiter string that does not exist in confdefs.h, to ease
-# handling of long lines.
-ac_delim='%!_!# '
-for ac_last_try in false false :; do
-  ac_t=`sed -n "/$ac_delim/p" confdefs.h`
-  if test -z "$ac_t"; then
-    break
-  elif $ac_last_try; then
-    as_fn_error "could not make $CONFIG_HEADERS" "$LINENO" 5
-  else
-    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
-  fi
-done
-
-# For the awk script, D is an array of macro values keyed by name,
-# likewise P contains macro parameters if any.  Preserve backslash
-# newline sequences.
-
-ac_word_re=[_$as_cr_Letters][_$as_cr_alnum]*
-sed -n '
-s/.\{148\}/&'"$ac_delim"'/g
-t rset
-:rset
-s/^[	 ]*#[	 ]*define[	 ][	 ]*/ /
-t def
-d
-:def
-s/\\$//
-t bsnl
-s/["\\]/\\&/g
-s/^ \('"$ac_word_re"'\)\(([^()]*)\)[	 ]*\(.*\)/P["\1"]="\2"\
-D["\1"]=" \3"/p
-s/^ \('"$ac_word_re"'\)[	 ]*\(.*\)/D["\1"]=" \2"/p
-d
-:bsnl
-s/["\\]/\\&/g
-s/^ \('"$ac_word_re"'\)\(([^()]*)\)[	 ]*\(.*\)/P["\1"]="\2"\
-D["\1"]=" \3\\\\\\n"\\/p
-t cont
-s/^ \('"$ac_word_re"'\)[	 ]*\(.*\)/D["\1"]=" \2\\\\\\n"\\/p
-t cont
-d
-:cont
-n
-s/.\{148\}/&'"$ac_delim"'/g
-t clear
-:clear
-s/\\$//
-t bsnlc
-s/["\\]/\\&/g; s/^/"/; s/$/"/p
-d
-:bsnlc
-s/["\\]/\\&/g; s/^/"/; s/$/\\\\\\n"\\/p
-b cont
-' <confdefs.h | sed '
-s/'"$ac_delim"'/"\\\
-"/g' >>$CONFIG_STATUS || ac_write_fail=1
-
-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-  for (key in D) D_is_set[key] = 1
-  FS = ""
-}
-/^[\t ]*#[\t ]*(define|undef)[\t ]+$ac_word_re([\t (]|\$)/ {
-  line = \$ 0
-  split(line, arg, " ")
-  if (arg[1] == "#") {
-    defundef = arg[2]
-    mac1 = arg[3]
-  } else {
-    defundef = substr(arg[1], 2)
-    mac1 = arg[2]
-  }
-  split(mac1, mac2, "(") #)
-  macro = mac2[1]
-  prefix = substr(line, 1, index(line, defundef) - 1)
-  if (D_is_set[macro]) {
-    # Preserve the white space surrounding the "#".
-    print prefix "define", macro P[macro] D[macro]
-    next
-  } else {
-    # Replace #undef with comments.  This is necessary, for example,
-    # in the case of _POSIX_SOURCE, which is predefined and required
-    # on some systems where configure will not decide to define it.
-    if (defundef == "undef") {
-      print "/*", prefix defundef, macro, "*/"
-      next
-    }
-  }
-}
-{ print }
-_ACAWK
-_ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-  as_fn_error "could not setup config headers machinery" "$LINENO" 5
-fi # test -n "$CONFIG_HEADERS"
-
-
-eval set X "  :F $CONFIG_FILES  :H $CONFIG_HEADERS    :C $CONFIG_COMMANDS"
+eval set X "  :F $CONFIG_FILES      :C $CONFIG_COMMANDS"
 shift
 for ac_tag
 do
@@ -3939,30 +3674,7 @@ which seems to be undefined.  Please make sure it is defined." >&2;}
   esac \
   || as_fn_error "could not create $ac_file" "$LINENO" 5
  ;;
-  :H)
-  #
-  # CONFIG_HEADER
-  #
-  if test x"$ac_file" != x-; then
-    {
-      $as_echo "/* $configure_input  */" \
-      && eval '$AWK -f "$tmp/defines.awk"' "$ac_file_inputs"
-    } >"$tmp/config.h" \
-      || as_fn_error "could not create $ac_file" "$LINENO" 5
-    if diff "$ac_file" "$tmp/config.h" >/dev/null 2>&1; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: $ac_file is unchanged" >&5
-$as_echo "$as_me: $ac_file is unchanged" >&6;}
-    else
-      rm -f "$ac_file"
-      mv "$tmp/config.h" "$ac_file" \
-	|| as_fn_error "could not create $ac_file" "$LINENO" 5
-    fi
-  else
-    $as_echo "/* $configure_input  */" \
-      && eval '$AWK -f "$tmp/defines.awk"' "$ac_file_inputs" \
-      || as_fn_error "could not create -" "$LINENO" 5
-  fi
- ;;
+
 
   :C)  { $as_echo "$as_me:${as_lineno-$LINENO}: executing $ac_file commands" >&5
 $as_echo "$as_me: executing $ac_file commands" >&6;}
@@ -3971,17 +3683,28 @@ $as_echo "$as_me: executing $ac_file commands" >&6;}
 
 
   case $ac_file$ac_mode in
-    "depfiles":C) test x"$AMDEP_TRUE" != x"" || for mf in $CONFIG_FILES; do
-  # Strip MF so we end up with the name of the file.
-  mf=`echo "$mf" | sed -e 's/:.*$//'`
-  # Check whether this is an Automake generated Makefile or not.
-  # We used to match only the files named `Makefile.in', but
-  # some people rename them; so instead we look at the file content.
-  # Grep'ing the first line is not enough: some people post-process
-  # each Makefile.in and add a new line on top of each file to say so.
-  # So let's grep whole file.
-  if grep '^#.*generated by automake' $mf > /dev/null 2>&1; then
-    dirpart=`$as_dirname -- "$mf" ||
+    "depfiles":C) test x"$AMDEP_TRUE" != x"" || {
+  # Autoconf 2.62 quotes --file arguments for eval, but not when files
+  # are listed without --file.  Let's play safe and only enable the eval
+  # if we detect the quoting.
+  case $CONFIG_FILES in
+  *\'*) eval set x "$CONFIG_FILES" ;;
+  *)   set x $CONFIG_FILES ;;
+  esac
+  shift
+  for mf
+  do
+    # Strip MF so we end up with the name of the file.
+    mf=`echo "$mf" | sed -e 's/:.*$//'`
+    # Check whether this is an Automake generated Makefile or not.
+    # We used to match only the files named `Makefile.in', but
+    # some people rename them; so instead we look at the file content.
+    # Grep'ing the first line is not enough: some people post-process
+    # each Makefile.in and add a new line on top of each file to say so.
+    # Grep'ing the whole file is not good either: AIX grep has a line
+    # limit of 2048, but all sed's we know have understand at least 4000.
+    if sed -n 's,^#.*generated by automake.*,X,p' "$mf" | grep X >/dev/null 2>&1; then
+      dirpart=`$as_dirname -- "$mf" ||
 $as_expr X"$mf" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$mf" : 'X\(//\)[^/]' \| \
 	 X"$mf" : 'X\(//\)$' \| \
@@ -4004,28 +3727,28 @@ $as_echo X"$mf" |
 	    q
 	  }
 	  s/.*/./; q'`
-  else
-    continue
-  fi
-  # Extract the definition of DEPDIR, am__include, and am__quote
-  # from the Makefile without running `make'.
-  DEPDIR=`sed -n 's/^DEPDIR = //p' < "$mf"`
-  test -z "$DEPDIR" && continue
-  am__include=`sed -n 's/^am__include = //p' < "$mf"`
-  test -z "am__include" && continue
-  am__quote=`sed -n 's/^am__quote = //p' < "$mf"`
-  # When using ansi2knr, U may be empty or an underscore; expand it
-  U=`sed -n 's/^U = //p' < "$mf"`
-  # Find all dependency output files, they are included files with
-  # $(DEPDIR) in their names.  We invoke sed twice because it is the
-  # simplest approach to changing $(DEPDIR) to its actual value in the
-  # expansion.
-  for file in `sed -n "
-    s/^$am__include $am__quote\(.*(DEPDIR).*\)$am__quote"'$/\1/p' <"$mf" | \
-       sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g' -e 's/\$U/'"$U"'/g'`; do
-    # Make sure the directory exists.
-    test -f "$dirpart/$file" && continue
-    fdir=`$as_dirname -- "$file" ||
+    else
+      continue
+    fi
+    # Extract the definition of DEPDIR, am__include, and am__quote
+    # from the Makefile without running `make'.
+    DEPDIR=`sed -n 's/^DEPDIR = //p' < "$mf"`
+    test -z "$DEPDIR" && continue
+    am__include=`sed -n 's/^am__include = //p' < "$mf"`
+    test -z "am__include" && continue
+    am__quote=`sed -n 's/^am__quote = //p' < "$mf"`
+    # When using ansi2knr, U may be empty or an underscore; expand it
+    U=`sed -n 's/^U = //p' < "$mf"`
+    # Find all dependency output files, they are included files with
+    # $(DEPDIR) in their names.  We invoke sed twice because it is the
+    # simplest approach to changing $(DEPDIR) to its actual value in the
+    # expansion.
+    for file in `sed -n "
+      s/^$am__include $am__quote\(.*(DEPDIR).*\)$am__quote"'$/\1/p' <"$mf" | \
+	 sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g' -e 's/\$U/'"$U"'/g'`; do
+      # Make sure the directory exists.
+      test -f "$dirpart/$file" && continue
+      fdir=`$as_dirname -- "$file" ||
 $as_expr X"$file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$file" : 'X\(//\)[^/]' \| \
 	 X"$file" : 'X\(//\)$' \| \
@@ -4048,13 +3771,14 @@ $as_echo X"$file" |
 	    q
 	  }
 	  s/.*/./; q'`
-    as_dir=$dirpart/$fdir; as_fn_mkdir_p
-    # echo "creating $dirpart/$file"
-    echo '# dummy' > "$dirpart/$file"
+      as_dir=$dirpart/$fdir; as_fn_mkdir_p
+      # echo "creating $dirpart/$file"
+      echo '# dummy' > "$dirpart/$file"
+    done
   done
-done
+}
  ;;
-    "Makefile":F) ac_file=Makefile . ${libgloss_topdir}/config-ml.in ;;
+    "Makefile":F) . ${libgloss_topdir}/config-ml.in ;;
 
   esac
 done # for ac_tag
@@ -4092,6 +3816,4 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
-
-
 
